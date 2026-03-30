@@ -22,7 +22,7 @@ PATH_RAW_DATA=/mnt/storage/USER/PJ101_TEMPLATE/a221123_AZ_Plac
 # Platform that generated the data. Valid options:
 #   NOVOGENE  → Illumina FASTQ structure from Novogene
 #   MGI       → DNBSEQ/G400 data structure
-PLATFORM=NOVOGENE
+PLATFORM=MGI
 
 ############################################################
 # Additional settings required only if PLATFORM=MGI

@@ -30,17 +30,22 @@ pixi self-update
 
 ### 2. Clone Required Repositories
 
+Create dependencies:
 ```bash
 mkdir ~/github_resources
 cd ~/github_resources
-
-# Clone this Prime-seq pipeline repository
-git clone https://github.com/DengLab-KI/Prime-seq_analysis.git
-
-# Clone zUMIs repository
-git clone https://github.com/sdparekh/zUMIs.git
-
 ```
+
+Clone this Prime-seq pipeline repository:
+```bash
+git clone https://github.com/DengLab-KI/Prime-seq_analysis.git
+```
+
+Clone zUMIs repository:
+```bash
+git clone https://github.com/sdparekh/zUMIs.git
+```
+
 
 ---
 
@@ -69,11 +74,13 @@ Example:
 EXPERIMENT=PJ101_TEMPLATE
 PATH_EXPERIMENT=/mnt/run/paulo/${EXPERIMENT}
 PATH_RAW_DATA=/mnt/storage/paulo/PJ101_TEMPLATE/
+PLATFORM=MGI
 FLOWCELL=V350293965
-BARCODE=IDTi51i7N701
+PRIMESEQ_INDEX=IDTi51i7N701
 ```
 
 Raw sequencing data for each user should be stored under `/mnt/storage/USER/`
+You'll find our G400 runs within `/mnt/storage/G400/`
 
 2. **Run QC script:**
 
@@ -90,6 +97,7 @@ This script will:
 Run the script like this:
 
 ```bash
+cd ~/github_resources/Prime-seq_analysis
 nohup ./scripts/01.primeseq_QC.sh >> log.01.primeseq_QC.txt
 ```
 
@@ -100,9 +108,8 @@ Approximately 1–5 hours, depending on the number of samples and lanes in the f
 
 3. **Check QC Reports:**
 
-```bash
-cd ~/$PATH_EXPERIMENT/Data/00.reports
-```
+cd ~/EXPERIMENT/Data/00.reports
+
 
 Open the untrimmed MultiQC report and go to <i>Per Base Sequence Content</i>:
 ```
@@ -125,28 +132,45 @@ Open the untrimmed MultiQC report and go to <i>Per Base Sequence Content</i>:
 
 ### Step 2: Prepare Barcode and YAML Configs
 
-1. **Edit sample barcode file using VS Code:**
+#### 2a. Prepare the sample barcode file
 
-```bash
-nano ~/github_resources/Prime-seq_analysis/Primeseq_barcodes_samples.tsv
-```
+Use `templates/sampleInfo.xlsx` and/or `templates/Template_Primeseq_barcodes_sample.txt` as a starting point.
 
-2. **Edit zUMIs YAML config  using VS Code:**
+* The file must contain exactly two columns: **`barcode`** (first) and **`sample`** (second)
+* Save as **tab-delimited text** (`.txt` or `.tsv`)
+* Each barcode corresponds to a unique well/sample in your Prime-seq plate
 
-```bash
-nano ~/github_resources/Prime-seq_analysis/primeseq_zUMIs_$EXPERIMENT.yaml
-```
+> 💡 Avoid spaces or special characters — these can cause issues in downstream R analysis.
 
-✅ Check and adjust the following in your YAML config file (`primeseq_zUMIs_$EXPERIMENT.yaml`):
-* Paths to FASTQ files
-* Project, flowcell and barcode/index info
-* Oligo-Barcodes file path (typically `Primeseq_barcodes_samples.tsv`)
-* Output directory (`/mnt/run/USER/$EXPERIMENT/`)
-* STAR index path and GTF file for the correct species
-  * Double-check STAR index compatibility with your read length:
-    * For PE100: Use `STAR_index_85` and set `base_definition: cDNA(15-100)`
-    * For PE150: Use `STAR_index_135` and set `base_definition: cDNA(15-150)`
-* Number of threads (adjust based on available CPUs on the server)
+---
+
+#### 2b. Configure the zUMIs YAML file
+
+Open `templates/primeseq_zUMIs.yaml` in VS Code and adjust the following:
+
+**Project and file paths:**
+* Set `EXPERIMENT` to match the name used in `config.sh`
+* Set `USER` to your username
+* Update paths to your FASTQ files (R1 and R2)
+* Set the output directory: `/mnt/run/USER/$EXPERIMENT/`
+* Set `barcode_file` to the path of your prepared `.tsv` file (e.g., `Primeseq_barcodes_samples.tsv`)
+
+**Read configuration — adjust based on sequencing mode:**
+
+| Sequencing mode | STAR index | `base_definition` |
+|---|---|---|
+| PE100 | `STAR_index_85` | `cDNA(15-100)` |
+| PE150 | `STAR_index_135` | `cDNA(15-150)` |
+
+**Reference genome:**
+- Verify the STAR index path and GTF file match your target species
+
+**Resources:**
+- Adjust the number of threads based on available CPUs on the server
+
+> ⚠️ Make sure the STAR index was built with a `sjdbOverhang` compatible with your read length (`read length − 1`). A mismatch is a common cause of poor mapping rates.
+
+Save the configured file within `~/github_resources/Prime-seq_analysis/primeseq_zUMIs.yaml`.
 
 ### Step 3: Run zUMIs
 
@@ -158,10 +182,11 @@ nohup ./scripts/02.primeseq_zUMIs.sh >> log.02.primeseq_zUMIs.txt
 ### Step 4: Downstream analysis in R
 * The R Markdown templates for downstream analysis are available in `~/$PATH_EXPERIMENT/scripts/`
 * You can either:
-  * transfer the `$EXPERIMENT` folder to your local machine (recommended for RStudio Desktop), or
-	* run the analysis directly on our workstation (recommended for large datasets or for VS code).
-* Note that large files are stored in `~/$PATH_EXPERIMENT/Data/`. If you download the experiment to your local machine, avoid syncing this folder.
-* When the analysis is completed, move at least the `~/$PATH_EXPERIMENT/Data/` directory to `/mnt/USER/storage/` for long-term storage. Do not keep raw data under `/mnt/run/`.
+  * run the analysis directly on our workstation (recommended for large datasets or for VS code), or
+  * transfer the `$EXPERIMENT` folder to your local machine (recommended for RStudio Desktop).
+	
+* Note that large files are stored in `~/EXPERIMENT/Data/`. If you download the experiment to your local machine, avoid syncing this folder.
+* When the analysis is completed, move at least the `~/EXPERIMENT/Data/` directory to `/mnt/USER/storage/` for long-term storage. Do not keep raw data under `/mnt/run/`.
 
 ---
 
