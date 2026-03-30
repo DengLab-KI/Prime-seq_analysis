@@ -35,7 +35,7 @@ mkdir ~/github_resources
 cd ~/github_resources
 
 # Clone this Prime-seq pipeline repository
-git clone https://github.com/paulojannig/Prime-seq_analysis.git
+git clone https://github.com/DengLab-KI/Prime-seq_analysis.git
 
 # Clone zUMIs repository
 git clone https://github.com/sdparekh/zUMIs.git
