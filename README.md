@@ -183,7 +183,7 @@ nohup ./scripts/02.primeseq_zUMIs.sh >> log.02.primeseq_zUMIs.txt
 * The R Markdown templates for downstream analysis are available in `~/$PATH_EXPERIMENT/scripts/`
 * You can either:
   * run the analysis directly on our workstation (recommended for large datasets or for VS code), or
-  * transfer the `$EXPERIMENT` folder to your local machine (recommended for RStudio Desktop).
+  * transfer the `EXPERIMENT` folder to your local machine (recommended for RStudio Desktop).
 	
 * Note that large files are stored in `~/EXPERIMENT/Data/`. If you download the experiment to your local machine, avoid syncing this folder.
 * When the analysis is completed, move at least the `~/EXPERIMENT/Data/` directory to `/mnt/USER/storage/` for long-term storage. Do not keep raw data under `/mnt/run/`.
