@@ -67,7 +67,7 @@ pixi shell -e default --manifest-path pixi.toml
 
 ### Step 1: QC of Raw Reads
 
-1. **Edit `config.sh`** to match your paths and project variables using VS Code (or by `nano config.sh`):
+#### 1a **Edit `config.sh`** to match your paths and project variables using VS Code (or by `nano config.sh`):
 
 Example:
 ```bash
@@ -82,7 +82,7 @@ PRIMESEQ_INDEX=IDTi51i7N701
 Raw sequencing data for each user should be stored under `/mnt/storage/USER/`
 You'll find our G400 runs within `/mnt/storage/G400/`
 
-2. **Run QC script:**
+#### 1b **Run QC script:**
 
 This script will:
 
@@ -106,7 +106,7 @@ This will keep the script running in the background and log the progress to `log
 **Expected runtime:**
 Approximately 1–5 hours, depending on the number of samples and lanes in the flowcell.
 
-3. **Check QC Reports:**
+#### 1c **Check QC Reports:**
 
 cd ~/EXPERIMENT/Data/00.reports
 
