@@ -49,7 +49,7 @@ mkdir -p \
     Data/03.zUMI_mapping
 
 # zUMIs mapping
-~/github_resources/zUMIs/zUMIs.sh -c -y ~/github_resources/Prime-seq_analysis/primeseq_zUMIs.yaml
+~/github_resources/zUMIs/zUMIs.sh -c -y ~/github_resources/Prime-seq_analysis/scripts/primeseq_zUMIs.yaml
 
 echo " ==================== Organizing files ==================== " `date`
 # Copy main zUMIs reports and results
@@ -62,8 +62,7 @@ cp -r ${PATH_EXPERIMENT}/Data/03.zUMI_mapping/zUMIs_output/expression/*.gene_nam
 cp ~/github_resources/Prime-seq_analysis/Primeseq_barcodes_samples.txt ${PATH_EXPERIMENT}/01.metadata
 
 # move yaml file
-cp ~/github_resources/Prime-seq_analysis/primeseq_zUMIs.yaml ${PATH_EXPERIMENT}/scripts/
-mv ~/github_resources/Prime-seq_analysis/primeseq_zUMIs.run.yaml ${PATH_EXPERIMENT}/scripts/
+mv ~/github_resources/Prime-seq_analysis/scripts/primeseq_zUMIs.run.yaml ${PATH_EXPERIMENT}/scripts/
 rm -r ${PATH_EXPERIMENT}/cat/
 
 echo " ========================================================================================== "

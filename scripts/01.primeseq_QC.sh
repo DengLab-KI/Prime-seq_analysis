@@ -53,13 +53,9 @@ mkdir -p \
     Data/01.RawData/merged/ \
     Data/02.TrimmedData
 
-## copy config file and templates
-#cp ~/github_resources/Prime-seq_analysis/templates/primeseq_zUMIs.yaml ~/github_resources/Prime-seq_analysis/primeseq_zUMIs.yaml
-#cp ~/github_resources/Prime-seq_analysis/templates/Template_Primeseq_barcodes_samples.txt ~/github_resources/Prime-seq_analysis/Primeseq_barcodes_samples.txt
-
 cp -r ~/github_resources/Prime-seq_analysis/scripts/*.Rmd ${PATH_EXPERIMENT}/scripts/
 cp -r ~/github_resources/Prime-seq_analysis/scripts/*.R ${PATH_EXPERIMENT}/scripts/
-cp -r ~/github_resources/Prime-seq_analysis/templates/sampleInfo.xlsx ${PATH_EXPERIMENT}/01.metadata/
+cp -r ~/github_resources/Prime-seq_analysis/templates/sampleInfo.* ${PATH_EXPERIMENT}/01.metadata/
 cp -r ~/github_resources/Prime-seq_analysis/miscellaneous/pathways_names_replacements.txt ${PATH_EXPERIMENT}/miscellaneous/
 cp -r ~/github_resources/Prime-seq_analysis/miscellaneous/*.Rmd ${PATH_EXPERIMENT}/miscellaneous/
 

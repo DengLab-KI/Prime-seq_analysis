@@ -134,11 +134,11 @@ Open the untrimmed MultiQC report and go to <i>Per Base Sequence Content</i>:
 
 #### 2a. Prepare the sample barcode file
 
-Use `templates/sampleInfo.xlsx` and/or `templates/Template_Primeseq_barcodes_sample.txt` as a starting point.
+Edit `/mnt/run/USER/EXPERIMENT/01.metadata/sampleInfo.xlsx` with sample details.
 
 * The file must contain exactly two columns: **`barcode`** (first) and **`sample`** (second)
-* Save as **tab-delimited text** (`.txt` or `.tsv`)
-* Each barcode corresponds to a unique well/sample in your Prime-seq plate
+* Each barcode corresponds to a unique sample in your Prime-seq library
+* Save as **tab-delimited text** (`.txt` or `.tsv`) within `/mnt/run/USER/EXPERIMENT/01.metadata/`
 
 > 💡 Avoid spaces or special characters — these can cause issues in downstream R analysis.
 
@@ -146,14 +146,14 @@ Use `templates/sampleInfo.xlsx` and/or `templates/Template_Primeseq_barcodes_sam
 
 #### 2b. Configure the zUMIs YAML file
 
-Open `templates/primeseq_zUMIs.yaml` in VS Code and adjust the following:
+Open `~/github_resources/Prime-seq_analysis/scripts/primeseq_zUMIs.yaml` in VS Code and adjust the following:
 
 **Project and file paths:**
 * Set `EXPERIMENT` to match the name used in `config.sh`
 * Set `USER` to your username
 * Update paths to your FASTQ files (R1 and R2)
-* Set the output directory: `/mnt/run/USER/$EXPERIMENT/`
-* Set `barcode_file` to the path of your prepared `.tsv` file (e.g., `Primeseq_barcodes_samples.tsv`)
+* Set the output directory: `/mnt/run/USER/EXPERIMENT/`
+* Set `barcode_file` to the path of your prepared `.txt` file (e.g., `/mnt/run/USER/EXPERIMENT/sampleInfo.txt`)
 
 **Read configuration — adjust based on sequencing mode:**
 
@@ -170,7 +170,8 @@ Open `templates/primeseq_zUMIs.yaml` in VS Code and adjust the following:
 
 > ⚠️ Make sure the STAR index was built with a `sjdbOverhang` compatible with your read length (`read length − 1`). A mismatch is a common cause of poor mapping rates.
 
-Save the configured file within `~/github_resources/Prime-seq_analysis/primeseq_zUMIs.yaml`.
+Save the configured file.
+In case you want to restore it, check `~/github_resources/Prime-seq_analysis/templates/primeseq_zUMIs_template.yaml`.
 
 ### Step 3: Run zUMIs
 
@@ -180,13 +181,13 @@ nohup ./scripts/02.primeseq_zUMIs.sh >> log.02.primeseq_zUMIs.txt
 ```
 
 ### Step 4: Downstream analysis in R
-* The R Markdown templates for downstream analysis are available in `~/$PATH_EXPERIMENT/scripts/`
+* The R Markdown templates for downstream analysis are available in `~/EXPERIMENT/scripts/`
 * You can either:
   * run the analysis directly on our workstation (recommended for large datasets or for VS code), or
   * transfer the `EXPERIMENT` folder to your local machine (recommended for RStudio Desktop).
 	
 * Note that large files are stored in `~/EXPERIMENT/Data/`. If you download the experiment to your local machine, avoid syncing this folder.
-* When the analysis is completed, move at least the `~/EXPERIMENT/Data/` directory to `/mnt/USER/storage/` for long-term storage. Do not keep raw data under `/mnt/run/`.
+* When the analysis is completed, move at least the `~/EXPERIMENT/Data/` directory to `/mnt/storage/USER` for long-term storage. ⚠️ Do not keep raw data under `/mnt/run/`.
 
 ---
 
